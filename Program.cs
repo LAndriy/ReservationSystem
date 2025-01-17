@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReservationSystem.Data;
 using ReservationSystem.Models;
@@ -13,12 +13,12 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-//builder.Services.AddAuthentication()
-//   .AddGoogle(googleOptions =>
-//    {
-//        googleOptions.ClientId = "YOUR_GOOGLE_CLIENT_ID";
-//        googleOptions.ClientSecret = "YOUR_GOOGLE_CLIENT_SECRET";
-//    });
+builder.Services.AddAuthentication()
+   .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = "535244753397-rgf8klnn63nkndsqe13sr6l9b8v2jt7v.apps.googleusercontent.com";
+        googleOptions.ClientSecret = "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";
+   });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,6 +27,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -34,7 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
