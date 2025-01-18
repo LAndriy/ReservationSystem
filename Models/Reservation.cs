@@ -18,7 +18,7 @@ namespace ReservationSystem.Models
         [Required]
         public DateTime Date { get; set; }
 
-        public bool IsPaid { get; set; }
+        public string PaymentStatus { get; set; }
 
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }

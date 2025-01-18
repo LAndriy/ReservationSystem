@@ -44,9 +44,27 @@ namespace ReservationSystem.Controllers
         [Authorize]
         public async Task<IActionResult> CreateReservation([FromBody] Reservation reservation)
         {
-            var userId = User.FindFirst("sub")?.Value;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Nieprawidłowe dane wejściowe.");
+            }
 
+            var userId = User.FindFirst("sub")?.Value;
             reservation.UserId = userId;
+
+            // Sprawdzanie, czy pracownik istnieje
+            var employeeExists = await _context.Employees.AnyAsync(e => e.Id == reservation.EmployeeId);
+            if (!employeeExists)
+            {
+                return BadRequest("Nie znaleziono pracownika o podanym Id.");
+            }
+
+            // Sprawdzanie daty rezerwacji
+            if (reservation.Date < DateTime.Now)
+            {
+                return BadRequest("Nie można zarezerwować terminu w przeszłości.");
+            }
+
             _context.Reservations.Add(reservation);
 
             try
@@ -66,6 +84,11 @@ namespace ReservationSystem.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateReservation(int id, [FromBody] Reservation updatedReservation)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Nieprawidłowe dane wejściowe.");
+            }
+
             var userId = User.FindFirst("sub")?.Value;
             var userRole = User.FindFirst("role")?.Value;
 
